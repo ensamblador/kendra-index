@@ -9,7 +9,7 @@ from kendra_constructs.roles import KendraServiceRole
 
 
 class KendraIndex(Construct):
-    def __init__(self, scope: Construct, id: str, **kwargs) -> None:
+    def __init__(self, scope: Construct, id: str, edition="DEVELOPER_EDITION", **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
 
@@ -17,7 +17,7 @@ class KendraIndex(Construct):
         self.role = KendraServiceRole(self, "KSR")
         
         self.index = kendra.CfnIndex(self, "I",
-            edition="DEVELOPER_EDITION",
+            edition=edition,
             name=stk.stack_name,
             role_arn=self.role.arn,
         )
