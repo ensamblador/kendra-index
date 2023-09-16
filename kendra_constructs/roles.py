@@ -22,7 +22,7 @@ class KendraServiceRole(Construct):
                 iam.PolicyStatement(actions=["kendra:BatchPutDocument","kendra:BatchDeleteDocument"], resources=['*']),
                 iam.PolicyStatement(actions=["lambda:*"], resources=['*']),
                 iam.PolicyStatement(actions=["s3:GetObject"], resources=['*']),
-                iam.PolicyStatement(actions=["s3:GetObject"], resources=['*'])
+                iam.PolicyStatement(actions=["s3:*"], resources=['*'])
                 
             ])
         )

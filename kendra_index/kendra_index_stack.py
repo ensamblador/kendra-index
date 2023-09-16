@@ -1,15 +1,11 @@
 from aws_cdk import (
-    # Duration,
-    Stack,
-    CustomResource,
+    Stack
 )
 from constructs import Construct
 
 from kendra_constructs import (
-    KendraIndex,
-    KendraCrawlerV2Datasource,
-    CRKendraCrawlerV2Datasource,
-    KendraCrawlerDatasource,
+    KendraIndex, CRKendraCrawlerV2Datasource,
+    KendraCrawlerDatasource, CRKendraS3Datasource
 )
 from s3_cloudfront import S3Deploy
 from lambdas import Lambdas
@@ -45,7 +41,6 @@ class KendraIndexStack(Stack):
             name = "connect-blogs-100",
             description = "100 Primeros Blogs de Connect",
             seed_urls=None,
-            #seed_urls=["https://aws.amazon.com/blogs/contact-center/aws-recognized-as-a-leader-in-2023-gartner-magic-quadrant-for-contact-center-as-a-service-with-amazon-connect/"],
             s3_seed_url = f"s3://{s3_deploy.bucket.bucket_name}/s3_urls/connect_blogs_1.txt",
             url_inclusion_patterns=["*.aws.amazon.com/blogs/contact-center/.*"],
             url_exclusion_patterns=["*./tag/.*"]
@@ -57,27 +52,30 @@ class KendraIndexStack(Stack):
             index_id= index.index_id,
             role_arn=index.role.arn,
             name = "connect-blogs-200",
-            description = "Blogs de 100 a 200",
+            description = "Blogs de 101 a 162",
             seed_urls=None,
-            #seed_urls=["https://aws.amazon.com/blogs/contact-center/aws-recognized-as-a-leader-in-2023-gartner-magic-quadrant-for-contact-center-as-a-service-with-amazon-connect/"],
             s3_seed_url = f"s3://{s3_deploy.bucket.bucket_name}/s3_urls/connect_blogs_2.txt",
             url_inclusion_patterns=["*.aws.amazon.com/blogs/contact-center/.*"],
             url_exclusion_patterns=["*./tag/.*"]
         )
+
+
+        files_es = s3_deploy.deploy("files_es","files_es", "files_es")
         
- 
-        connect_workshops = CRKendraCrawlerV2Datasource(
-            self, "Workshops",
+        s3_files_es_ds = CRKendraS3Datasource(
+            self, "S3_pdf_es",
             service_token=Fn.data_source_creator.function_arn,
             index_id= index.index_id,
             role_arn=index.role.arn,
-            name = "connect-workshops",
-            description = "workshops",
-            seed_urls=None,
-            #seed_urls=["https://aws.amazon.com/blogs/contact-center/aws-recognized-as-a-leader-in-2023-gartner-magic-quadrant-for-contact-center-as-a-service-with-amazon-connect/"],
-            s3_seed_url = f"s3://{s3_deploy.bucket.bucket_name}/s3_urls/connect_workshops.txt",
-            url_inclusion_patterns=["*.aws.amazon.com/blogs/contact-center/.*"],
-            url_exclusion_patterns=["*./tag/.*"]
+            name = "files-es",
+            description = "documentos en español",
+            bucket_name=s3_deploy.bucket.bucket_name,
+            language_code = 'es',
+            inclusion_prefixes=["files_es/"],
+            inclusion_patterns = []
+
         )
         
- 
+
+
+        

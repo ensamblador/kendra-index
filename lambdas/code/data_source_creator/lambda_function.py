@@ -23,8 +23,8 @@ def lambda_handler(event, context):
             # send_response(event, context, "SUCCESS",{"Message": "Resource creation successful!"})
         elif event['RequestType'] == 'Update':
             print('UPDATE!')
-            send_response(event, context, "SUCCESS",
-                          {"Message": "Resource update successful!"})
+            update_webcrawler2(event, context)
+
         elif event['RequestType'] == 'Delete':
             print('DELETE!')
             delete_webcrawler2(event, context)
@@ -70,9 +70,41 @@ def create_webcrawler2 (event, context):
 
 def delete_webcrawler2 (event, context):
     if 'PhysicalResourceId' in event:
-        index_id, id =  event['PhysicalResourceId'].split("|")
-        response = kendra_client.delete_data_source(Id=id,IndexId=index_id)
+        if event['PhysicalResourceId'] !="NOT_YET":
+            index_id, id =  event['PhysicalResourceId'].split("|")
+            response = kendra_client.delete_data_source(Id=id,IndexId=index_id)
     send_response(event, context, "SUCCESS", {"Message": "Resource deletion successful!"})
+
+
+def update_webcrawler2(event, context):
+    if "ResourceProperties" in event:
+        print ("create_datasource")
+        props = event['ResourceProperties']
+        index_id, id =  event['PhysicalResourceId'].split("|")
+
+        print("props:",props)
+        
+        kwargs = dict ( 
+            Id = id,
+            Name=props['name'],
+            IndexId=index_id,
+            Configuration={"TemplateConfiguration": {"Template":json.loads(props['template'])}},
+            Description=props['description'],
+            Schedule=props['schedule'],
+            RoleArn=props['role_arn'],
+            LanguageCode=props['language_code']
+        )
+        
+        print ("kwargs:",kwargs)
+        res = kendra_client.update_data_source(**kwargs)
+        print ("response: ",res)
+        #index_id = props['index_id']
+        #event['PhysicalResourceId'] = f"{index_id}|{ds_id}"
+        ##ds_id = res['Id']
+        # send_response(event, context, "SUCCESS",{"Message": "Resource creation successful!"})
+    else:
+        print("no resource properties!")
+    send_response(event, context, "SUCCESS", {"Message": "Resource update successful!"})
 
 def send_response(event, context, response_status, response_data):
     '''Send a resource manipulation status response to CloudFormation'''

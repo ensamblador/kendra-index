@@ -19,5 +19,17 @@ class S3Deploy(Construct):
         )
 
 
+    def deploy(self, id,  files_loc, prefix):
+        deployment = s3deploy.BucketDeployment(self, id,
+            sources=[s3deploy.Source.asset(files_loc)],
+            destination_bucket = self.bucket,
+            retain_on_delete=False,
+            destination_key_prefix=prefix
+        )
+        return deployment
+
+
+
+
 
 
