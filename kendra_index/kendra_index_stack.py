@@ -59,7 +59,7 @@ class KendraIndexStack(Stack):
             url_exclusion_patterns=["*./tag/.*"]
         )
 
-
+        
         files_es = s3_deploy.deploy("files_es","files_es", "files_es")
         
         s3_files_es_ds = CRKendraS3Datasource(
@@ -75,6 +75,7 @@ class KendraIndexStack(Stack):
             inclusion_patterns = []
 
         )
+        
         
 
 
