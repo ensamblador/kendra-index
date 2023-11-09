@@ -21,7 +21,7 @@ class KendraIndexStack(Stack):
         Fn = Lambdas(self, "Fn")
 
         s3_deploy = S3Deploy(self, "urls", "urls", "s3_urls")
-
+        '''
         connect_docs_ds = KendraCrawlerDatasource(
             self,
             "ConnectDocs",
@@ -58,7 +58,7 @@ class KendraIndexStack(Stack):
             url_inclusion_patterns=["*.aws.amazon.com/blogs/contact-center/.*"],
             url_exclusion_patterns=["*./tag/.*"]
         )
-
+        '''
         
         files_es = s3_deploy.deploy("files_es","files_es", "files_es")
         
@@ -71,7 +71,8 @@ class KendraIndexStack(Stack):
             description = "documentos en español",
             bucket_name=s3_deploy.bucket.bucket_name,
             language_code = 'es',
-            inclusion_prefixes=["files_es/"],
+            inclusion_prefixes=["documents/"],
+            metadata_files_prefix = "metadata/",
             inclusion_patterns = []
 
         )

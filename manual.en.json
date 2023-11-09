@@ -1,0 +1,45 @@
+{
+    "Id": "0525c0d9-9a1e-420d-ba0e-e91b5d0eedc0",
+    "IndexId": "6cf2116a-54c6-43ef-85fc-6ca3aae9b551",
+    "Name": "sample-manual",
+    "Type": "TEMPLATE",
+    "Configuration": {
+        "TemplateConfiguration": {
+            "Template": {
+                "connectionConfiguration": {
+                    "repositoryEndpointMetadata": {
+                        "BucketName": "amazon-kendra-sample-docs-us-east-1"
+                    }
+                },
+                "syncMode": "FORCED_FULL_CRAWL",
+                "additionalProperties": {
+                    "inclusionPatterns": [],
+                    "maxFileSizeInMegaBytes": "100",
+                    "inclusionPrefixes": [],
+                    "exclusionPatterns": [],
+                    "metadataFilesPrefix": "metadata/"
+                },
+                "type": "S3",                
+                "version": "1.0.0",
+                "repositoryConfigurations": {
+                    "document": {
+                        "fieldMappings": [
+                            {
+                                "dataSourceFieldName": "s3_document_id",
+                                "indexFieldName": "s3_document_id",
+                                "indexFieldType": "STRING"
+                            }
+                        ]
+                    }
+                }
+            }
+        }
+    },
+    "CreatedAt": "2023-11-09T12:02:06.527000-03:00",
+    "UpdatedAt": "2023-11-09T12:02:06.527000-03:00",
+    "Description": "",
+    "Status": "ACTIVE",
+    "Schedule": "",
+    "RoleArn": "arn:aws:iam::461004555540:role/kendra-index-IKSRC7156E80-RFii12bYPv9j",
+    "LanguageCode": "en"
+}
