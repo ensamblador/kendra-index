@@ -67,12 +67,12 @@ class KendraIndexStack(Stack):
             service_token=Fn.data_source_creator.function_arn,
             index_id= index.index_id,
             role_arn=index.role.arn,
-            name = "files-es",
-            description = "documentos en español",
+            name = "files-es-v2",
+            description = "documentos en espa?ol",
             bucket_name=s3_deploy.bucket.bucket_name,
             language_code = 'es',
-            inclusion_prefixes=["documents/"],
-            metadata_files_prefix = "metadata/",
+            inclusion_prefixes=["files_es/documents/"],
+            metadata_files_prefix = "files_es/metadata/documents/",
             inclusion_patterns = []
 
         )
