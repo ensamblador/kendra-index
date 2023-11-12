@@ -72,7 +72,7 @@ class KendraIndexStack(Stack):
             bucket_name=s3_deploy.bucket.bucket_name,
             language_code = 'es',
             inclusion_prefixes=["files_es/documents/"],
-            metadata_files_prefix = "files_es/metadata/documents/",
+            #metadata_files_prefix = "files_es/metadata/",
             inclusion_patterns = []
 
         )
