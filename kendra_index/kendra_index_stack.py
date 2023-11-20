@@ -77,6 +77,22 @@ class KendraIndexStack(Stack):
 
         )
         
+        s3_files_es_ds = CRKendraS3Datasource(
+            self, "S3_pdf_es_reinvent",
+            service_token=Fn.data_source_creator.function_arn,
+            index_id= index.index_id,
+            role_arn=index.role.arn,
+            name = "files-reinvent-v2",
+            description = "",
+            bucket_name=s3_deploy.bucket.bucket_name,
+            language_code = 'en',
+            inclusion_prefixes=["files_es/reinvent/"],
+            #metadata_files_prefix = "files_es/metadata/",
+            inclusion_patterns = []
+
+        )
+        
+        
         
 
 
