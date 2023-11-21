@@ -356,7 +356,8 @@ class CRKendraS3Datasource(Construct):
             inclusionPrefixes=inclusion_prefixes,
             exclusionPatterns=exclusion_patterns,
             inclusionPatterns=inclusion_patterns,
-            exclusionPrefixes=exclusion_prefixes,
+            maxFileSizeInMegaBytes ="100",
+            #exclusionPrefixes=exclusion_prefixes,
         )
 
         if metadata_files_prefix:
@@ -364,7 +365,6 @@ class CRKendraS3Datasource(Construct):
 
         template = dict(
             connectionConfiguration=connection_configuration,
-            enableIdentityCrawler=False,
             syncMode="FORCED_FULL_CRAWL",
             additionalProperties=additiona_properties,
             type="S3",
