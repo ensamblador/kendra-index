@@ -5,10 +5,8 @@ import aws_cdk as cdk
 
 from kendra_index.kendra_index_stack import KendraIndexStack
 
-TAGS = {
-    'app': 'Kendra-Index-CDK',
-    'customer': 'internal-demo'
-}
+TAGS = {"app": "generative ai business apps", "customer": "kendra-index-enterprise"}
+
 
 
 app = cdk.App()
