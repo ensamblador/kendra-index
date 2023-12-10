@@ -1,46 +1,23 @@
-from aws_cdk import (
-    Stack,
-    CfnOutput
-)
+from aws_cdk import Stack, CfnOutput, aws_ssm as ssm
 from constructs import Construct
 
-from kendra_constructs import (
-    KendraIndex, CRKendraCrawlerV2Datasource,
-    KendraCrawlerDatasource, CRKendraS3Datasource
-)
-from s3_cloudfront import S3Deploy
-from lambdas import Lambdas
+from kendra_constructs import KendraIndex
+
 
 
 class KendraIndexStack(Stack):
     def __init__(self, scope: Construct, construct_id: str, **kwargs) -> None:
         super().__init__(scope, construct_id, **kwargs)
 
-        index = KendraIndex(self, "I")
-        # enterprise_index = KendraIndex(self, "IE", edition="ENTERPRISE_EDITION")
+        # self.index = KendraIndex(self, "I")
+        self.index = KendraIndex(self, "IE", edition="ENTERPRISE_EDITION")
+        self.create_ssm_param("kendra-index-id", self.index.index_id)
+        CfnOutput(self, "output_index_id", value=self.index.index_id)
 
-        Fn = Lambdas(self, "Fn")
-        
-        files_es = S3Deploy(self, "files_es","files_es", "files_es")
-    
-        
-        s3_files_es_ds = CRKendraS3Datasource(
-            self, "S3_pdf_es_reinvent_v3",
-            service_token=Fn.data_source_creator.function_arn,
-            index_id= index.index_id,
-            role_arn=index.role.arn,
-            name = "files-reinvent-v3",
-            description = "",
-            bucket_name=files_es.bucket.bucket_name,
-            language_code = 'en',
-            inclusion_prefixes=["files_es/reinvent/"],
-            #metadata_files_prefix = "files_es/metadata/",
-            inclusion_patterns = []
+    def create_ssm_param(self, name, value):
+        ssm.StringParameter(
+            self,
+            f"ssm-{name}",
+            parameter_name=f"/gen-ai-apps/{name}",
+            string_value=value,
         )
-        CfnOutput(self, "output_index_id", value=index.index_id,export_name= "REINVENT-INDEX-ID")
-        
-        
-        
-
-
-        
